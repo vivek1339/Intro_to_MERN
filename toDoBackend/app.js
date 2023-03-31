@@ -21,6 +21,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
+const cors = require('cors');
+app.use(cors({
+    origin: '*'
+}));
 const mongoose = require('mongoose');
 mongoose
   .connect('mongodb+srv://express_user:express_user@cluster0.fnfbvfq.mongodb.net/?retryWrites=true&w=majority', { useNewUrlParser: true })
