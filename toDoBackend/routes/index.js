@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var cors = require('cors')
 const mongoose = require('mongoose');
 
 /* GET home page. */
@@ -12,13 +13,16 @@ router.get('/', function(req, res, next) {
 const Todo = require('../models/Todo');
 
 // Routes
-router.get('/api/get_all', (req, res) => {
+router.get('/api/get_all', cors(), (req, res) => {
   Todo.find()
-    .then(todos => res.json(todos))
+    .then(todos => {
+      console.log(todos)
+      res.json(todos)
+    })
     .catch(err => res.status(404).json({ notodosfound: 'No to-do items found' }));
 });
 
-router.post('/api/add', (req, res) => {
+router.post('/api/add', cors(), (req, res) => {
   const new_task = new Todo({name:req.body.name, date:req.body.date})
   new_task.save()
   .then((task_item)=>{
@@ -29,7 +33,7 @@ router.post('/api/add', (req, res) => {
   })
 });
 
-router.post('/api/update/', (req, res) => {
+router.post('/api/update/', cors(), (req, res) => {
   Todo.findByIdAndUpdate(req.body.id, {name:req.body.name, date:req.body.date})
   .then((result)=>{
     res.send(result)
@@ -40,7 +44,7 @@ router.post('/api/update/', (req, res) => {
   
 });
 
-router.post('/api/delete', (req, res) => {
+router.post('/api/delete', cors(), (req, res) => {
   Todo.deleteOne({_id:req.body.id})
   .then(todo => res.json({ success: true }))
   .catch(err => res.status(404).json({ error: 'No to-do item found' }));

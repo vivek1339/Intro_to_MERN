@@ -26,6 +26,11 @@ const cors = require('cors');
 app.use(cors({
     origin: '*'
 }));
+const corsOptions = {
+  origin: true,
+  credentials: true
+}
+app.options('*', cors(corsOptions));
 const mongoose = require('mongoose');
 mongoose
   .connect('mongodb+srv://express_user:express_user@cluster0.fnfbvfq.mongodb.net/?retryWrites=true&w=majority', { useNewUrlParser: true })

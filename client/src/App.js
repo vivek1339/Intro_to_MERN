@@ -26,7 +26,7 @@ const App = () => {
     // alert("hi")
     setLoading(true);
     axios
-      .post('http://localhost:3001/api/add', { name: inputValue })
+      .post('http://localhost:3001/api/add', { name: inputValue }, {headers:{'Access-Control-Allow-Credentials':'true'}})
       .then(res => {
         setItems([res.data, ...items]);
         setLoading(false);
