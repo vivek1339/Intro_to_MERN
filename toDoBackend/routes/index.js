@@ -21,29 +21,29 @@ router.get('/api/get_all', (req, res) => {
 router.post('/api/add', (req, res) => {
   const new_task = new Todo({name:req.body.name, date:req.body.date})
   new_task.save()
-  .then(()=>{
-    res.sendStatus(200)
+  .then((task_item)=>{
+    res.json({id:task_item._id})
   })
   .catch((err)=>{
     res.sendStatus(400)
   })
 });
 
-router.post('/api/update/:id', (req, res) => {
-  Todo.findByIdAndUpdate(req.params.id, {name:req.body.name, date:req.body.date}, (err, result)=>{
-    if(err){
-      res.sendStatus(400)
-    }
-    else{
-      res.send(result)
-    }
+router.post('/api/update/', (req, res) => {
+  Todo.findByIdAndUpdate(req.body.id, {name:req.body.name, date:req.body.date})
+  .then((result)=>{
+    res.send(result)
   })
+  .catch((err)=>{
+    res.sendStatus(400)
+  })
+  
 });
 
-router.delete('/api/todos/:id', (req, res) => {
-  Todo.findByIdAndRemove(req.params.id)
-    .then(todo => res.json({ success: true }))
-    .catch(err => res.status(404).json({ error: 'No to-do item found' }));
+router.post('/api/delete', (req, res) => {
+  Todo.deleteOne({_id:req.body.id})
+  .then(todo => res.json({ success: true }))
+  .catch(err => res.status(404).json({ error: 'No to-do item found' }));
 });
 
 
